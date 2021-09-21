@@ -40,7 +40,8 @@ namespace Toybot
                     );
                     
                     //Adding our database services.
-                    services.AddScoped<ITagService, TagService>();
+                    services.AddScoped<ITagService, TagService>()
+                        .AddScoped<IRoleConfigService, RoleConfigService>();
 
                     //The hosting extension needs a tracer so we are providing a mock tracer.
                     services.AddSingleton<ITracer>(provider => new MockTracer());
@@ -69,9 +70,11 @@ namespace Toybot
                     //Setting up SlashCommands and Context Menus.
                     services.AddDiscordSlashCommands(options =>
                     {
+                        options.Services = services.BuildServiceProvider();
                     }, extension =>
                     {
                         extension.RegisterCommands<SlashCommandsTagModule>(719334790129647720);
+                        extension.RegisterCommands<SlashCommandsConfigModule>(719334790129647720);
                     });
 
                     services.AddDiscordInteractivity(options =>
