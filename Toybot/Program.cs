@@ -40,8 +40,10 @@ namespace Toybot
                     );
                     
                     //Adding our database services.
-                    services.AddScoped<ITagService, TagService>()
-                        .AddScoped<IRoleConfigService, RoleConfigService>();
+                    services
+                        .AddScoped<ITagService, TagService>()
+                        .AddScoped<IRoleConfigService, RoleConfigService>()
+                        .AddScoped<IRolePersistService, RolePersistService>();
 
                     //The hosting extension needs a tracer so we are providing a mock tracer.
                     services.AddSingleton<ITracer>(provider => new MockTracer());
@@ -63,7 +65,6 @@ namespace Toybot
                         }, extension =>
                         {
                             extension.RegisterCommands<PingModule>();
-                            extension.RegisterCommands<TagModule>();
                         }
                     );
                     
