@@ -8,7 +8,7 @@ using Nefarius.DSharpPlus.Extensions.Hosting.Events;
 namespace Toybot.Events
 {
     [DiscordMessageEventsSubscriber]
-    internal class MemberEvents: IDiscordMessageEventsSubscriber
+    internal class MessageEvents: IDiscordMessageEventsSubscriber
     {
         public Task DiscordOnMessageCreated(DiscordClient sender, MessageCreateEventArgs args)
         {

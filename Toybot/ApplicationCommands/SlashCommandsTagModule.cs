@@ -11,7 +11,7 @@ using DSharpPlus.SlashCommands.Attributes;
 using Toybot.Models;
 using Toybot.Services;
 
-namespace Toybot.SlashCommands
+namespace Toybot.ApplicationCommands
 {
     [SlashModuleLifespan(SlashModuleLifespan.Scoped)]
     [SlashCommandGroup("tag", "A group related to tags.")]

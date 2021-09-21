@@ -18,7 +18,7 @@ using OpenTracing.Mock;
 using Toybot.Commands;
 using Toybot.Data;
 using Toybot.Services;
-using Toybot.SlashCommands;
+using Toybot.ApplicationCommands;
 
 namespace Toybot
 {
