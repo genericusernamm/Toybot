@@ -72,7 +72,7 @@ namespace Toybot.ApplicationCommands
 
             }
             
-            [RequireRole("Admin")]
+            [RequireRoleType("Admin")]
             [SlashCommand("set", "Set a configurable role.")]
             public async Task SetRoleConfigAsync(InteractionContext ctx,
                 [Option("toSet", "Configurable role to set")]

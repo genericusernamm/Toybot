@@ -75,6 +75,10 @@ namespace Toybot
                     {
                         extension.RegisterCommands<SlashCommandsTagModule>(719334790129647720);
                         extension.RegisterCommands<SlashCommandsConfigModule>(719334790129647720);
+                        extension.RegisterCommands<SlashCommandsGravelModule>(719334790129647720);
+                        extension.RegisterCommands<SlashCommandsTagModule>(783751280132227083);
+                        extension.RegisterCommands<SlashCommandsConfigModule>(783751280132227083);
+                        extension.RegisterCommands<SlashCommandsGravelModule>(783751280132227083);
                     });
 
                     services.AddDiscordInteractivity(options =>

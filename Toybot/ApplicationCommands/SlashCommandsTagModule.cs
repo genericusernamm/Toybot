@@ -25,7 +25,7 @@ namespace Toybot.ApplicationCommands
             _tag = tag;
         }
 
-        [RequireRole("Regular")]
+        [RequireRoleType("Regular")]
         [SlashCommand("get", "Gets a tag by name.")]
         public async Task GetTagByNameAsync(InteractionContext ctx, 
             [Option("name", "The name of the tag")] string name)
@@ -46,7 +46,7 @@ namespace Toybot.ApplicationCommands
             }
         }
 
-        [RequireRole("Regular")]
+        [RequireRoleType("Regular")]
         [SlashCommand("list", "Gets all tags for this guild.")]
         public async Task GetTagsAsync(InteractionContext ctx)
         {
@@ -73,8 +73,8 @@ namespace Toybot.ApplicationCommands
             }
         }
         
-        [RequireRole("Helper")]
         [SlashCommand("set", "Adds or edits a tag.")]
+        [RequireRoleType("Mod")]
         public async Task TagSetAsync(InteractionContext ctx, 
             [Option("name", "The name of the tag")] string name, 
             [Option("content", "The content of the tag")] string content)
@@ -130,8 +130,9 @@ namespace Toybot.ApplicationCommands
             
         }
         
-        [RequireRole("Mod")] 
+        
         [SlashCommand("delete", "Deletes a tag")]
+        [RequireRoleType("Mod")]
         public async Task RemoveTagAsync(InteractionContext ctx,
             [Option("name", "The name of the tag to remove")]
             string name)

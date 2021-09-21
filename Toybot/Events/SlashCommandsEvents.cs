@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -12,9 +14,17 @@ namespace Toybot.Events
     [DiscordSlashCommandsEventsSubscriber]
     public class SlashCommandsEvents: IDiscordSlashCommandsEventsSubscriber
     {
-        public Task SlashCommandsOnContextMenuErrored(SlashCommandsExtension sender, ContextMenuErrorEventArgs args)
+        public async Task SlashCommandsOnContextMenuErrored(SlashCommandsExtension sender, ContextMenuErrorEventArgs args)
         {
-            throw new System.NotImplementedException();
+            if (args.Exception is ContextMenuExecutionChecksFailedException chex)
+            {
+                foreach (var check in chex.FailedChecks)
+                    if (check is RequireRoleTypeContextMenuAttribute requireRoleTypeAttribute)
+                        await args.Context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, 
+                            new DiscordInteractionResponseBuilder()
+                                .WithContent($"You must have the role {requireRoleTypeAttribute.Role.Mention} to use this context menu action.")
+                                .AsEphemeral(true));
+            }
         }
 
         public Task SlashCommandsOnContextMenuExecuted(SlashCommandsExtension sender, ContextMenuExecutedEventArgs args)
@@ -27,7 +37,7 @@ namespace Toybot.Events
             if (args.Exception is SlashExecutionChecksFailedException slex)
             {
                 foreach (var check in slex.FailedChecks)
-                    if (check is RequireRoleAttribute att)
+                    if (check is RequireRoleTypeAttribute att)
                         await args.Context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, 
                             new DiscordInteractionResponseBuilder()
                                 .WithContent($"You must have the role {att.Role.Mention} to use this command.")

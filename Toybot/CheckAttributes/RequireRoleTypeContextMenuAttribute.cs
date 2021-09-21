@@ -9,16 +9,16 @@ using Toybot.Services;
 
 namespace Toybot.CheckAttributes
 {
-    public class RequireRoleAttribute: SlashCheckBaseAttribute
+    public class RequireRoleTypeContextMenuAttribute: ContextMenuCheckBaseAttribute
     {
         public string RoleType;
         public DiscordRole Role;
 
-        public RequireRoleAttribute(string roleType)
+        public RequireRoleTypeContextMenuAttribute(string roleType)
         {
             RoleType = roleType;
         }
-        public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)
+        public override async Task<bool> ExecuteChecksAsync(ContextMenuContext ctx)
         {
             var factory = ctx.Services.GetRequiredService<IServiceScopeFactory>();
 
@@ -40,5 +40,6 @@ namespace Toybot.CheckAttributes
             }
             
         }
+        
     }
 }
