@@ -5,9 +5,9 @@ The repository for the custom bot created for IbxToychat
 
 #### Prerequisites
 
-- .NET 5.0 (Most people already have this installed, otherwise VS or Rider will install the SDK for you)
-- [Visual Studio](https://visualstudio.com) or [Rider](https://jetbrains.com/rider) or any other .NET IDE
-- [PostgresSQL Server](https://www.postgresql.org/download/)
+-[ ] .NET 5.0 (Most people already have this installed, otherwise VS or Rider will install the SDK for you)
+-[ ] [Visual Studio](https://visualstudio.com) or [Rider](https://jetbrains.com/rider) or any other .NET IDE
+-[ ] [PostgresSQL Server](https://www.postgresql.org/download/)
 
 #### Steps
 
