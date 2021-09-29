@@ -14,5 +14,6 @@ namespace Toybot.Data
         public DbSet<RoleConfig> RoleConfigs { get; set; }
         public DbSet<GuildConfig> GuildConfigs { get; set; }
         public DbSet<RolePersist> RolePersists { get; set; }
+        public DbSet<Modlog> Modlogs { get; set; }
     }
 }

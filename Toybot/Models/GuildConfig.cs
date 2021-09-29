@@ -4,6 +4,7 @@ namespace Toybot.Models
     {
         public int Id { get; set; }
         public ulong GuildId { get; set; }
+        public ulong LoggingChannelId{ get; set; }
     
     }
 }

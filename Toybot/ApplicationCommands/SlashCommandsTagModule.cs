@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
@@ -24,6 +25,9 @@ namespace Toybot.ApplicationCommands
         {
             _tag = tag;
         }
+        
+        //ChoiceProvider choices
+        
 
         [RequireRoleType("Regular")]
         [SlashCommand("get", "Gets a tag by name.")]

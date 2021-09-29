@@ -1,9 +1,11 @@
+using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using Toybot.CheckAttributes;
+using Toybot.HelperClasses;
 using Toybot.Models;
 using Toybot.Services;
 
@@ -20,43 +22,70 @@ namespace Toybot.ApplicationCommands
             _rolePersist = rolePersist;
         }
 
-        [ContextMenu(ApplicationCommandType.UserContextMenu, "Gravel User")]
-        [RequireRoleTypeContextMenu("Mod")]
-        public async Task GravelUserMenu(ContextMenuContext ctx)
+        [SlashCommand("gravel", "Gravels a user")]
+        public async Task GravelCommandAsync(InteractionContext ctx, 
+            [Option("user", "The user to gravel")]DiscordUser user,
+            [Option("reason", "The reason to be displayed in modlogs.")]string reason,
+            [Option("duration", "The duration to apply the role persist for.")]string duration 
+                = default)
         {
+
+            var member = user as DiscordMember;
             await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
-            
+
             var gravelRole = await _roleConfig.GetRoleConfigByTypeAsync(ctx.Guild.Id, "Gravel");
 
-            
-
             if (gravelRole is null)
-                await ctx.FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .WithContent("Please assign a Gravel role with /config role set Gravel"));
-            else
             {
-                
-                await ctx.TargetMember.GrantRoleAsync(ctx.Guild.GetRole(gravelRole.RoleId), "Gravel");
-                
-                var rolePersistList = await _rolePersist
-                    .GetRolePersistByMemberAsync(ctx.Guild.Id, ctx.TargetMember.Id);
-                var existing = rolePersistList
-                    .SingleOrDefault(x => x.RoleId == gravelRole.RoleId);
-
-                if (existing is null)
-                {
-                    await _rolePersist.AddRolePersistAsync(new RolePersist()
-                    {
-                        GuildId = ctx.Guild.Id,
-                        MemberId = ctx.TargetMember.Id,
-                        RoleId = gravelRole.RoleId
-                    });
-
-                }
-                
                 await ctx.FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .WithContent($"Added {ctx.TargetMember.Mention} to Gravel."));
+                    .WithContent("There is no Gravel role set up for this guild."));
+                return;
             }
+
+            await member.GrantRoleAsync(ctx.Guild.GetRole(gravelRole.RoleId));
+
+            var memberPersists = await _rolePersist
+                .GetRolePersistByMemberAsync(ctx.Guild.Id, user.Id);
+
+            var existingPersist = memberPersists.SingleOrDefault(x
+                => x.RoleId == gravelRole.RoleId);
+
+            if (existingPersist is not null)
+            {
+                await ctx.FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .WithContent("That user is already gravelled."));
+                return;
+            }
+
+            var newPersist = new RolePersist()
+            {
+                GuildId = ctx.Guild.Id,
+                MemberId = user.Id,
+                RoleId = gravelRole.RoleId,
+            };
+
+            try
+            {
+                var timeSpan = TimeSpan.ParseExact(duration, TimespanFormat.AllFormats, CultureInfo.InvariantCulture);
+                newPersist.Expires = DateTime.UtcNow + timeSpan;
+                await ctx.FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .WithContent($"Gravelled user {user.Mention} until {newPersist.Expires}."));
+            }
+            catch (FormatException exception)
+            {
+                await ctx.FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .WithContent($"Gravelled user {user.Mention} without a duration."));
+            }
+
+            await _rolePersist.AddRolePersistAsync(newPersist);
+
         }
+
+        [SlashCommand("ungravel", "Removes a user from gravel.")]
+        public async Task UngravelAsync(InteractionContext ctx, DiscordUser user)
+        {
+            
+        }
+
     }
 }
